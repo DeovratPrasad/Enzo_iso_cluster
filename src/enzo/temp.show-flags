@@ -1,0 +1,21 @@
+
+CPP = /opt/software/intel-compilers/2021.2.0/compiler/2021.2.0/linux/bin/intel64/icpc
+CC  = /opt/software/impi/2021.2.0-intel-compilers-2021.2.0/mpi/2021.2.0/bin/mpicc
+CXX = /opt/software/impi/2021.2.0-intel-compilers-2021.2.0/mpi/2021.2.0/bin/mpicxx
+FC  = /opt/software/impi/2021.2.0-intel-compilers-2021.2.0/mpi/2021.2.0/bin/mpif90
+F90 = /opt/software/impi/2021.2.0-intel-compilers-2021.2.0/mpi/2021.2.0/bin/mpif90
+LD  = /opt/software/impi/2021.2.0-intel-compilers-2021.2.0/mpi/2021.2.0/bin/mpicxx
+
+DEFINES = -DLINUX -DH5_USE_16_API   -D__max_subgrids=100000 -D__max_baryons=30 -D__max_cpu_per_node=8 -D__memory_pool_size=100000 -DINITS64 -DLARGE_INTS -DCONFIG_PINT_8 -DIO_32    -DUSE_MPI   -DCONFIG_PFLOAT_8 -DCONFIG_BFLOAT_8  -DUSE_HDF5_GROUPS   -DTRANSFER   -DNEW_GRID_IO -DFAST_SIB      -DENZO_PERFORMANCE    -DSAB
+
+INCLUDES = -I/mnt/home/deovratd/hdf5_1_8_20/include            -I.
+
+CPPFLAGS = -P -traditional 
+CFLAGS   =  -O2
+CXXFLAGS = -DMPICH_SKIP_MPICXX -O2
+FFLAGS   = -fno-second-underscore -ffixed-line-length-132 -O2
+F90FLAGS =  -O2
+LDFLAGS  =  -O2
+
+LIBS     = -L/mnt/home/deovratd/hdf5_1_8_20/lib -lhdf5 -lz  -L/opt/software/intel-compilers/2021.2.0/compiler/2021.2.0/linux/compiler/lib/intel64 -lm -lcilkrts -lifcore -lifport -lgfortran        
+
