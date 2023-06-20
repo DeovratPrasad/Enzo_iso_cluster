@@ -158,7 +158,7 @@ int grid::ClusterInitializeGrid(int NumberOfSpheres,
   float NFWRadius[NFW_POINTS], Totp[NFW_POINTS], Kent[NFW_POINTS];
   double dpdr = 0, dpdr_old, rkpc, pg, fn, fnp, err; // Newton-Raphson variables - Deovrat
   //double a_0 = 20.0*3.086e21, rho_0 = 4.0*1.67e-24; //A2029
-  double a_0 = 20.0*3.086e21, rho_0 = 1.0*1.67e-24; //Phoenix
+  //double a_0 = 20.0*3.086e21, rho_0 = 1.0*1.67e-24; //Phoenix
   //double a_0 = 1.2*3.086e21 , rho_0 = 5.0*1.67e-22; // NGC5044
   //double a_0 = 1.6*3.086e21, rho_0 = 3.3*1.67e-22; // NGC4472
 
@@ -167,23 +167,16 @@ int grid::ClusterInitializeGrid(int NumberOfSpheres,
 
   FILE *fptr = fopen("NFWProfile.out", "w");
   Konst = 0.617*mh*POW((1.17*mh),gmma-1.0)/(kboltz*1.16e7); // constant for Newton-Raphson
-  printf("Before loop, c200=%"GSYM",a_0=%"GSYM",rho_0=%"GSYM",ClusterSMBHMass=%"GSYM"\n",c200, a_0, rho_0, ClusterSMBHMass);
+  //printf("Before loop, c200=%"GSYM",a_0=%"GSYM",rho_0=%"GSYM",ClusterSMBHMass=%"GSYM"\n",c200, a_0, rho_0, ClusterSMBHMass);
   for (i = 0; i < NFW_POINTS; i++) {
     NFWRadius[i] = SphereRadius[sphere]*pow(10, -5*(float(i)/NFW_POINTS));
     x1 = NFWRadius[i]/SphereCoreRadius[sphere];
     NFWDensity[i] = SphereDensity[sphere]/(x1*(1.0+x1)*(1.0+x1));    // DM Density
-    if (SphereType[sphere]>=6 && SphereType[sphere] <= 8) {  //aka 6, 7, 8: Perseus Cluster
+    if (SphereType[sphere]>=6 && SphereType[sphere] <= 8) {  //aka 6, 7, 8: Perseus, Phoenix, A2029 Cluster
        //rkpc=NFWRadius[i]*LengthUnits/(1.0e-3*Mpc);
-       Kent[i] = 10.0 + 165.0*pow(NFWRadius[i]*LengthUnits/(0.1*Mpc_cm), 0.95); //A2029
-    /* Set Gravity. NFW Dark Matter, BCG+BH */
-       //Allg[i]=GravConst*PointSourceGravityConstant*SolarMass*((log(1.0+x1)-x1/(1.0+x1))
-       //      /(log(1.0+c200)-c200/(1.0+c200)))/POW(NFWRadius[i]*LengthUnits, 2.0)
-       //       + 2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/pow((a_0+NFWRadius[i])*LengthUnits, 2) // using Hernquist profile for BCG
-       //       + GravConst*SolarMass* ClusterSMBHMass/POW(NFWRadius[i]*LengthUnits, 2);
-//
-       //Totp[i] = -(GravConst*PointSourceGravityConstant*SolarMass*log(1.0+x1)/(log(1.0+c200) - c200/(1.0+c200))/(NFWRadius[i]*LengthUnits + sl*Mpc_cm) //NFW component
-       //	 + 2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/(a_0+NFWRadius[i]*LengthUnits) //Hernquist potential - BCG
-       //           + GravConst*ClusterSMBHMass*SolarMass/(NFWRadius[i]*LengthUnits - 2.0*GravConst*ClusterSMBHMass*SolarMass/POW(clight,2))); //SMBH potential
+       //Kent[i] = 10.0 + 165.0*pow(NFWRadius[i]*LengthUnits/(0.1*Mpc_cm), 0.95); //A2029
+       //Kent[i] = 5.0 + 110.0*pow(NFWRadius[i]*LengthUnits/(0.1*Mpc_cm), 1.4); //Phoenix
+       Kent[i] = ClusterBaryonK0 + ClusterBaryonK100*pow(NFWRadius[i]*LengthUnits/(0.1*Mpc_cm), ClusterBaryonAlphaK); //Perseus
   }else if (SphereType[sphere]==1) {  //galaxy
      Kent[i] = 5.0 + 85.0*pow((NFWRadius[i]*LengthUnits/(0.1*Mpc_cm)),1.1); //Galaxy 2.0*10^12 Msun
   }else if (SphereType[sphere]==2) {  //NGC4472//NGC5044
@@ -193,14 +186,14 @@ int grid::ClusterInitializeGrid(int NumberOfSpheres,
            ENZO_FAIL("Entropy for this SphereType not defined.");
   }
         Allg[i]=GravConst*PointSourceGravityConstant*SolarMass*
-                ((log(1.0+x1)-x1/(1.0+x1)) /(log(1.0+c200)-c200/(1.0+c200)))/pow(NFWRadius[i]*LengthUnits, 2.0) 
-                + 2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/pow((a_0+NFWRadius[i])*LengthUnits, 2)  //using Hernquist profile
-                +GravConst*SolarMass* ClusterSMBHMass / POW(NFWRadius[i]*LengthUnits, 2)  ;
- 
-	Totp[i] =  -(GravConst*PointSourceGravityConstant*SolarMass*log(1.0+x1)/(log(1.0+c200) - c200/(1.0+c200))/(NFWRadius[i]*LengthUnits + sl*Mpc_cm) //NFW
-       		 + 2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/(a_0+NFWRadius[i]*LengthUnits) //Hernquist profile - stellar profile
+                 ((log(1.0+x1)-x1/(1.0+x1)) /(log(1.0+ClusterSphereC200)-ClusterSphereC200/(1.0+ClusterSphereC200)))/pow(NFWRadius[i]*LengthUnits, 2.0) 
+                 + 2.0*3.14159265*GravConst*(ClusterBCGRho0*mh)*pow(ClusterBCGA0*(0.001*Mpc_cm),3)/pow((ClusterBCGA0*(0.001*Mpc_cm)+NFWRadius[i])*LengthUnits, 2)
+                 + GravConst*SolarMass*ClusterSMBHMass / POW(NFWRadius[i]*LengthUnits, 2)  ;
+
+        Totp[i] =  -(GravConst*PointSourceGravityConstant*SolarMass*log(1.0+x1)/(log(1.0+ClusterSphereC200) - ClusterSphereC200/(1.0+ClusterSphereC200))/(NFWRadius[i]*LengthUnits + sl*Mpc_cm) //NFW
+                 + 2.0*3.14159265*GravConst*(ClusterBCGRho0*mh)*pow(ClusterBCGA0*(0.001*Mpc_cm),3)/(ClusterBCGA0*(0.001*Mpc_cm)+NFWRadius[i]*LengthUnits) //Hernquist profile - stellar profile
                  + GravConst*ClusterSMBHMass*SolarMass/(NFWRadius[i]*LengthUnits - 2.0*GravConst*ClusterSMBHMass*SolarMass/POW(clight,2)))    ; // SMBH  profile
-	//printf("c200=%"GSYM",a_0=%"GSYM",rho_0=%"GSYM",ClusterSMBHMass=%"GSYM"\n",c200, a_0, rho_0, ClusterSMBHMass);
+        //printf("c200=%"GSYM",a_0=%"GSYM",rho_0=%"GSYM",Entropyk100=%"GSYM"\n",ClusterSphereC200, ClusterBCGA0, ClusterBCGRho0, ClusterBaryonK100);
 
     if (i==0){
 	// This section has been completely modified by Deovrat Prasad (Nov, 2018)

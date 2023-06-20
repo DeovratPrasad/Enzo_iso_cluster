@@ -1282,6 +1282,12 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     ret += sscanf(line, "ClusterSMBHDiskRadius = %"FSYM, &ClusterSMBHDiskRadius);
     ret += sscanf(line, "ClusterSMBHBCG = %"FSYM, &ClusterSMBHBCG);
     ret += sscanf(line, "ClusterSMBHMass = %"FSYM, &ClusterSMBHMass);
+    ret += sscanf(line, "ClusterSphereC200 = %"FSYM, &ClusterSphereC200);
+    ret += sscanf(line, "ClusterBCGRho0 = %"FSYM, &ClusterBCGRho0);
+    ret += sscanf(line, "ClusterBCGA0 = %"FSYM, &ClusterBCGA0);
+    ret += sscanf(line, "ClusterBaryonK0 = %"FSYM, &ClusterBaryonK0);
+    ret += sscanf(line, "ClusterBaryonK100 = %"FSYM, &ClusterBaryonK100);
+    ret += sscanf(line, "ClusterBaryonAlphaK = %"FSYM, &ClusterBaryonAlphaK);
     ret += sscanf(line, "EllipticalGalaxyRe = %"FSYM, &EllipticalGalaxyRe);
     ret += sscanf(line, "OldStarFeedbackAlpha = %"FSYM, &OldStarFeedbackAlpha);
     ret += sscanf(line, "SNIaFeedbackEnergy = %"FSYM, &SNIaFeedbackEnergy);

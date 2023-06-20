@@ -1116,7 +1116,13 @@ EXTERN int ClusterSMBHJetDim;  // Jet dimension
 EXTERN float ClusterSMBHAccretionEpsilon;  // Edot=epsilon*Mdot(accreted/removed)*c^2
 EXTERN float ClusterSMBHDiskRadius; // The size of the "disk" (actually a cube) in kpc
 EXTERN float ClusterSMBHBCG; // 1.0 is including BCG gravity; 0.0 makes it 0
-EXTERN float ClusterSMBHMass; // The mass of the SMBH in SolarMass
+EXTERN float ClusterSMBHMass;  //The mass of the SMBH in SolarMass
+EXTERN float ClusterSphereC200; // NFW concentration parameter
+EXTERN float ClusterBCGRho0;   //Hernquist Profile parameter in M_H
+EXTERN float ClusterBCGA0;     //Hernquist profile scale radius in kpc
+EXTERN float ClusterBaryonK0;  //Baryon entropy profile parameter
+EXTERN float ClusterBaryonK100; //Baryon entropy profile parameter
+EXTERN float ClusterBaryonAlphaK; //Baryon entropy profile parameter
 
 /* AGN active particle data */
 EXTERN int ActiveParticleCounter;

@@ -184,9 +184,9 @@ int grid::ComputeAccelerationFieldExternal()
               //Yuan, Aug 2011: Add BCG and SMBH potential if ProblemType == 108
               if(ProblemType == 108){
                 accel = GravConst*PointSourceGravityConstant*SolarMass*
-                ((log(1.0+x  )-x  /(1.0+x  ))/(log(1.0+c200)-c200/(1.0+c200))) /
+                ((log(1.0+x  )-x  /(1.0+x  ))/(log(1.0+ClusterSphereC200)-ClusterSphereC200/(1.0+ClusterSphereC200))) /
                 pow(radius*LengthUnits, 2.0) / AccelUnits 
-                +2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/pow((a_0+radius*LengthUnits), 2)/AccelUnits
+                +2.0*3.14159265*GravConst*(ClusterBCGRho0*mh)*pow(ClusterBCGA0*(0.001*Mpc_cm),3)/pow((ClusterBCGA0*(0.001*Mpc_cm)+radius*LengthUnits), 2)/AccelUnits
                 +GravConst*SolarMass*ClusterSMBHMass / POW(radius*LengthUnits
                 - 2.0*GravConst*ClusterSMBHMass*SolarMass/POW(clight,2),2)/AccelUnits;
 		/*Bondi*/
@@ -312,9 +312,9 @@ int grid::ComputeAccelerationFieldExternal()
               if(ProblemType == 108){
                 accel = GravConst*PointSourceGravityConstant*SolarMass*
                 ((log(1.0+x  )-x  /(1.0+x  )) /
-                 (log(1.0+c200) - c200/(1.0+c200))) /
+                 (log(1.0+ClusterSphereC200) - ClusterSphereC200/(1.0+ClusterSphereC200))) /
   		 POW(radius*LengthUnits + sl*Mpc_cm, 2.0) / AccelUnits // NFW potential
-                 + 2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/pow((a_0+radius*LengthUnits), 2)/ AccelUnits // Hernquist potential for BCG
+                 + 2.0*3.14159265*GravConst*(ClusterBCGRho0*mh)*pow(ClusterBCGA0*(0.001*Mpc_cm),3)/pow((ClusterBCGA0*(0.001*Mpc_cm)+radius*LengthUnits), 2)/ AccelUnits // Hernquist potential for BCG
                  + GravConst*SolarMass*ClusterSMBHMass/POW(radius*LengthUnits
                  - 2.0*GravConst*SolarMass*ClusterSMBHMass/POW(clight,2),2)/AccelUnits; // SMBH potential
                   /*Bondi*/
@@ -394,9 +394,9 @@ int grid::ComputeAccelerationFieldExternal()
 
              if(ProblemType == 108){
                   accel = GravConst*PointSourceGravityConstant*SolarMass*
-                   ((log(1.0+x)-x/(1.0+x))/(log(1.0+c200)-c200/(1.0+c200))) /
+                   ((log(1.0+x)-x/(1.0+x))/(log(1.0+ClusterSphereC200)-ClusterSphereC200/(1.0+ClusterSphereC200))) /
                    pow(radius*LengthUnits + sl*Mpc_cm, 2.0) / AccelUnits
-                   + 2.0*3.14159265*GravConst*rho_0*pow(a_0,3)/pow((a_0 + radius*LengthUnits), 2)/ AccelUnits
+                   + 2.0*3.14159265*GravConst*(ClusterBCGRho0*mh)*pow(ClusterBCGA0*(0.001*Mpc_cm),3)/pow((ClusterBCGA0*(0.001*Mpc_cm) + radius*LengthUnits), 2)/ AccelUnits
                    + GravConst*SolarMass*ClusterSMBHMass / pow(radius*LengthUnits 
 		   - 2.0*GravConst*SolarMass*ClusterSMBHMass/pow(clight,2), 2) / AccelUnits;
 

@@ -668,6 +668,12 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
   ClusterSMBHDiskRadius            = 0.5;
   ClusterSMBHBCG                   = 1.0;
   ClusterSMBHMass                  = 0.0;
+  ClusterSphereC200                = 1.0;
+  ClusterBCGRho0                   = 1.0;
+  ClusterBCGA0                     = 1.0;
+  ClusterBaryonK0                  = 1.0;
+  ClusterBaryonK100                = 100.0;
+  ClusterBaryonAlphaK              = 1.0;
 
   AGNParticleFeedbackEfficiency       = 1.0e-3;
   AGNParticleKineticFraction          = 0.9;
